@@ -36,28 +36,32 @@ colors = {
 
 
 def rand_color():
-    '''
+    """
     return a random key from dictionary
     of colors for text
-    '''
+    """
     return random.choice(list(colors.keys()))
 
 
 def add_color(image, color, transparency):
-    color = Image.new("RGB", image.size, color)
-    mask = Image.new("RGBA", image.size, (0, 0, 0, transparency))
-    return Image.composite(image, color, mask).convert("RGB")
+    '''
+    Take in an image and apply color and
+    opacity changes, return new image
+    '''
+    applied_color = Image.new("RGB", image.size, color)
+    applied_mask = Image.new("RGBA", image.size, (0, 0, 0, transparency))
+    return Image.composite(image, applied_color, applied_mask).convert("RGB")
 
 
 def center_text(img, font, text1, text2, fill1, fill2):
     draw = ImageDraw.Draw(img)
-    w, h = img.size
+    width, height = img.size
     t1_width = draw.textlength(text1, font)
     t2_width = draw.textlength(text2, font)
-    p1 = ((w - t1_width) / 2, h // 3)
-    p2 = ((w - t2_width) / 2, h // 3 + h // 5)
-    draw.text(p1, text1, fill=fill1, font=font)
-    draw.text(p2, text2, fill=fill2, font=font)
+    point_one = ((width - t1_width) / 2, height // 3)
+    point_two = ((width - t2_width) / 2, height // 3 + height // 5)
+    draw.text(point_one, text1, fill=fill1, font=font)
+    draw.text(point_two, text2, fill=fill2, font=font)
     return img
 
 
