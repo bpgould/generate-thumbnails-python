@@ -1,7 +1,9 @@
 {
     "imageName": "name",
     "color": "random",
-    "font": "font",
+    "font": "static/RobotoMono-Bold.ttf",
+    "background": "default_img/default_1500_wide.png",
+    "foreground": "",
     "text": [
         "text1",
         "text2"

@@ -1,4 +1,4 @@
-'''
+"""
 Utility for generating Notion header images that
 function as thumbnails when combined with the gallery
 view of a Notion database
@@ -6,23 +6,20 @@ view of a Notion database
 For optimization across different device screens,
 the ideal image dimensions are 1500px x 600px with
 primary content centered within 1170px x 230px
-'''
+"""
 import json
+import random
 from PIL import Image, ImageDraw, ImageFont
 
-with open('config.json', 'r') as file:
-    config = json.loads(file.read())
-
-print(f"config loaded:\n{json.dumps(config, indent=2)}")
 
 # create Image object
-img_name = "out.png"
-text1 = "Leetcode"
-text2 = "1. Two Sum"
-color = "orange"
-font = "static/RobotoMono-Bold.ttf"
+# img_name = "out.png"
+# text1 = "Leetcode"
+# text2 = "1. Two Sum"
+# color = "orange"
+# font = "static/RobotoMono-Bold.ttf"
 
-background = Image.open("default_img/default_1500_wide.png")
+# background = Image.open("default_img/default_1500_wide.png")
 # foreground = Image.open("Lorenz.png")
 
 # create the coloured overlays
@@ -49,6 +46,8 @@ colors = {
     },
 }
 
+def rand_color():
+    return random.choice(list(colors.keys()))
 
 def add_color(image, c, transparency):
     color = Image.new("RGB", image.size, c)
@@ -116,5 +115,24 @@ def write_image(background, color, text1, text2, foreground=""):
 
 
 if __name__ == "__main__":
+    try:
+        with open("config.json", "r") as file:
+            config = json.loads(file.read())
+    except IOError:
+        print("There was an error opening the file `config.json`")
+
+    print(f"config loaded:\n{json.dumps(config, indent=2)}")
+
+    img_name = config.get('imageName')
+    text1 = config.get('text')[0]
+    text2 = config.get('text')[1]
+    color = config.get('color')
+    font = config.get('font')
+    background = Image.open(config.get('background'))
+
+    if color == 'random':
+        color = rand_color()
+        print(f'new color is {color}')
+
     background = write_image(background, colors[color], text1, text2, foreground="")
     background.save(img_name)
