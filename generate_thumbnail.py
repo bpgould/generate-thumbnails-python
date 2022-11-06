@@ -11,18 +11,6 @@ import json
 import random
 from PIL import Image, ImageDraw, ImageFont
 
-
-# create Image object
-# img_name = "out.png"
-# text1 = "Leetcode"
-# text2 = "1. Two Sum"
-# color = "orange"
-# font = "static/RobotoMono-Bold.ttf"
-
-# background = Image.open("default_img/default_1500_wide.png")
-# foreground = Image.open("Lorenz.png")
-
-# create the coloured overlays
 colors = {
     "blank": {
         "c": (0, 0, 0),
@@ -46,11 +34,17 @@ colors = {
     },
 }
 
+
 def rand_color():
+    '''
+    return a random key from dictionary
+    of colors for text
+    '''
     return random.choice(list(colors.keys()))
 
-def add_color(image, c, transparency):
-    color = Image.new("RGB", image.size, c)
+
+def add_color(image, color, transparency):
+    color = Image.new("RGB", image.size, color)
     mask = Image.new("RGBA", image.size, (0, 0, 0, transparency))
     return Image.composite(image, color, mask).convert("RGB")
 
@@ -58,8 +52,8 @@ def add_color(image, c, transparency):
 def center_text(img, font, text1, text2, fill1, fill2):
     draw = ImageDraw.Draw(img)
     w, h = img.size
-    t1_width, t1_height = draw.textsize(text1, font)
-    t2_width, t2_height = draw.textsize(text2, font)
+    t1_width = draw.textlength(text1, font)
+    t2_width = draw.textlength(text2, font)
     p1 = ((w - t1_width) / 2, h // 3)
     p2 = ((w - t2_width) / 2, h // 3 + h // 5)
     draw.text(p1, text1, fill=fill1, font=font)
@@ -97,8 +91,8 @@ def add_text(
 
 
 def add_logo(background, foreground):
-    bg_w, bg_h = background.size
-    img_w, img_h = foreground.size
+    bg_h = background.size[1]
+    img_h = foreground.size[1]
     img_offset = (20, (bg_h - img_h) // 2)
     background.paste(foreground, img_offset, foreground)
     return background
@@ -123,19 +117,18 @@ if __name__ == "__main__":
 
     print(f"config loaded:\n{json.dumps(config, indent=2)}")
 
-    img_name = config.get('imageName')
-    text1 = config.get('text')[0]
-    text2 = config.get('text')[1]
-    color = config.get('color')
-    font = config.get('font')
-    background_file = config.get('background')
+    img_name = config.get("imageName")
+    text1 = config.get("text")[0]
+    text2 = config.get("text")[1]
+    color = config.get("color")
+    font = config.get("font")
+    background_file = config.get("background")
     background = Image.open(background_file)
+    # foreground = Image.open("Lorenz.png")
 
-    print(f'img_name: {img_name}, text1: {text1}, text2: {text2}, color: {color}, font: {font}, background: {background_file}')
-
-    if color == 'random':
+    if color == "random":
         color = rand_color()
-        print(f'new color is {color}')
+        print(f"new color is {color}")
 
     background = write_image(background, colors[color], text1, text2, foreground="")
     background.save(img_name)
