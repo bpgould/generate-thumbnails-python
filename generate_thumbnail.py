@@ -128,7 +128,10 @@ if __name__ == "__main__":
     text2 = config.get('text')[1]
     color = config.get('color')
     font = config.get('font')
-    background = Image.open(config.get('background'))
+    background_file = config.get('background')
+    background = Image.open(background_file)
+
+    print(f'img_name: {img_name}, text1: {text1}, text2: {text2}, color: {color}, font: {font}, background: {background_file}')
 
     if color == 'random':
         color = rand_color()
