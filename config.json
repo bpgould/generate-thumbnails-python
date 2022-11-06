@@ -1,0 +1,9 @@
+{
+    "imageName": "name",
+    "color": "random",
+    "font": "font",
+    "text": [
+        "text1",
+        "text2"
+    ]
+}
